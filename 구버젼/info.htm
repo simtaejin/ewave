@@ -1,0 +1,46 @@
+<? 
+    $file = file_get_contents('./control.txt', true);
+?>
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=euc-kr">
+<title>도메인 안내</title>
+<meta name="generator" content="Namo WebEditor(Trial)">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;"><b>도메인 안내</b></span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">본 계정은 &quot; </span><font color="#009900"><span style="font-size:10pt;"><b>Board Lab</b></span></font><span style="font-size:10pt;"> &quot; 에서 시행하고 있는 &quot; </span><font color="#009900"><span style="font-size:10pt;"><b>(주)선진</b></span></font><span style="font-size:10pt;"> &quot; 의 과제 용역을 위하여 운영되는 계정입니다.</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">관계자가 아닌데 본 페이지를 보게 되셨다면 페이지를 닫아 주시고 방문을 삼가 바랍니다.</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">현재 보고 계시는 주소 &quot; </span><font color="#9900FF"><span style="font-size:10pt;">http://sunjin.bada24.net</span></font><span style="font-size:10pt;"> &quot; 는 안내용 페이지입니다.</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;"><b>데이터 읽기 방법</b></span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">데이터를 읽기 위해서는 아래의 주소를 사용합니다.</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><font color="#9900FF"><span style="font-size:10pt;"><a href="http://sunjin.bada24.net/data_view.php" target="_blank">http://sunjin.bada24.net/data_view.php</a></span></font></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;"><b>오류 데이터 읽기 방법</b></span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">데이터를 읽기 위해서는 아래의 주소를 사용합니다.</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><font color="#9900FF"><span style="font-size:10pt;"><a href="http://sunjin.bada24.net/err_view.php" target="_blank">http://sunjin.bada24.net/err_view.php</a></span></font></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;"><b>데이터 쓰기 방법 1</b></span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">데이터의 입출력에 사용되는 옵션은 &nbsp;&quot;</span><font color="fuchsia"><span style="font-size:10pt;">data</span></font><span style="font-size:10pt;">&quot; 입니다.</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">데이터 &quot; </span><font color="fuchsia"><span style="font-size:10pt;">mb=2&sb=2&t1=2&t2=2&t3=2&t4=2&h1=2&f1=2&w1=2&w2=2&e1=888&p=0</span></font><span style="font-size:10pt;"> &quot; 를 기록하기 위해서는 다음과 같은 옵션을 사용합니다.</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><font color="#9900FF"><span style="font-size:10pt;">http://sunjin.bada24.net/?mb=2&sb=2&t1=2&t2=2&t3=2&t4=2&h1=2&f1=2&w1=2&w2=2&e1=888&p=0</span></font></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;"><b>데이터 쓰기 방법 2</b></span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">장비에서 원격으로 데이터를 기록할 때에는 &quot;방법 1&quot;을 사용하고, 직접 기록할 때에는 아래에 입력 합니다.</span></p>
+<form action='write.php' method='post'>
+<input type='text' name="data" maxlength="50" size="50"> <input type='submit' value='데이터 전송' style="padding-top:3px;">
+<p style="line-height:140%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;"><b>제어 테이터 설정</b></span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">아래에 제어할 데이터를 바이너리 4Bit 로 입력 합니다. (예 : 0101)</span></p>
+<p style="line-height:140%; margin-top:0; margin-bottom:0;"><span style="font-size:10pt;">현재 설정되어 있는 제어 데이터는 "<font color="fuchsia"><?echo"$file";?></font>" 입니다.</span></p>
+<input type='text' name="control_data" maxlength="50" size="50" value="<?$file?>"> <input type='submit' value='제어 데이터' style="padding-top:3px;">
+</form>
+</body>
+</html> 

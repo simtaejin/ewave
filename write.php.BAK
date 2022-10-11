@@ -1,0 +1,9 @@
+<?
+if(!$control_data) include_once "./info.htm";
+else if($control_data){
+    $file_pointer = fopen("control.txt", "w");
+    fwrite($file_pointer, $control_data);
+    fclose($file_pointer); 
+}
+?>
+
