@@ -61,8 +61,12 @@ if (!empty($_REQUEST['user_id']) &&
         </table>
     </form>
     <?php } else { ?>
+        <?php if ($_SESSION['user_id'] == "admin") { ?>
         <a href="./view.day.php">차트 1</a><br/>
         <a href="./view.month.php">차트 2</a><br/>
+        <?php } else if ($_SESSION['user_id'] == "admin2") { ?>
+        <a href="./view.time.php">차트 3</a><br/>
+        <?php }  ?>
     <?php } ?>
     </body>
 </html>

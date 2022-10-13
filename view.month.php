@@ -60,7 +60,7 @@ if (!empty($_REQUEST['mb']) &&
     <button type="submit" style="width:100px; height: 100px;">검색</button>
 </form>
 
-<div>
+<div style="width: 80%">
     <canvas id="myChart" ></canvas>
 </div>
 
