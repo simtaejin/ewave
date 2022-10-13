@@ -67,6 +67,7 @@ if (!empty($_REQUEST['user_id']) &&
         <?php } else if ($_SESSION['user_id'] == "admin2") { ?>
         <a href="./view.time.php">차트 3</a><br/>
         <?php }  ?>
+        <a href="./logout.php">로그아웃</a>
     <?php } ?>
     </body>
 </html>
