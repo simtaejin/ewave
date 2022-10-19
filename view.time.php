@@ -4,31 +4,35 @@ include_once "session.php";
 
 if (!empty($_REQUEST['mb']) &&
     !empty($_REQUEST['sdate']) &&
-    !empty($_REQUEST['edate'])) {
+    !empty($_REQUEST['edate']) &&
+    !empty($_REQUEST['d'])
+    ) {
 
     foreach ($_REQUEST as $k => $v) {
         $$k = $v;
     }
 
+    $bun = $d * 60;
+
     if ($t == "T1") {
-        $field = " TRUNCATE(sum(T1),2) t1sum, ";
+        $field = " TRUNCATE(avg(T1),2) t1sum, ";
     } else if ($t == "T2") {
-        $field = " TRUNCATE(sum(T2),2) t2sum, ";
+        $field = " TRUNCATE(avg(T2),2) t2sum, ";
     } else if ($t == "T3") {
-        $field = " TRUNCATE(sum(T3),2) t3sum, ";
+        $field = " TRUNCATE(avg(T3),2) t3sum, ";
     } else if ($t == "T4") {
-        $field = " TRUNCATE(sum(T4),2) t4sum, ";
+        $field = " TRUNCATE(avg(T4),2) t4sum, ";
     } else if ($t == "T5") {
-        $field = " TRUNCATE(sum(T5),2) t5sum, ";
+        $field = " TRUNCATE(avg(T5),2) t5sum, ";
     } else if ($t == "T6") {
-        $field = " TRUNCATE(sum(T6),2) t6sum, ";
+        $field = " TRUNCATE(avg(T6),2) t6sum, ";
     } else if ($t == "T7") {
-        $field = " TRUNCATE(sum(T7),2) t7sum, ";
+        $field = " TRUNCATE(avg(T7),2) t7sum, ";
     } else {
-        $field = " TRUNCATE(sum(T1),2) t1sum, TRUNCATE(sum(T2),2) t2sum, TRUNCATE(sum(T3),2) t3sum, TRUNCATE(sum(T4),2) t4sum, TRUNCATE(sum(T5),2) t5sum, TRUNCATE(sum(T6),2) t6sum, TRUNCATE(sum(T7),2) t7sum, ";
+        $field = " TRUNCATE(avg(T1),2) t1sum, TRUNCATE(avg(T2),2) t2sum, TRUNCATE(avg(T3),2) t3sum, TRUNCATE(avg(T4),2) t4sum, TRUNCATE(avg(T5),2) t5sum, TRUNCATE(avg(T6),2) t6sum, TRUNCATE(avg(T7),2) t7sum, ";
     }
 
-    $sql = "SELECT FROM_UNIXTIME(CAST(FLOOR(UNIX_TIMESTAMP(concat(BOARD_DATE,' ',BOARD_TIME))/60) AS SIGNED)*60) AS tDate,
+    $sql = "SELECT FROM_UNIXTIME(CAST(FLOOR(UNIX_TIMESTAMP(concat(BOARD_DATE,' ',BOARD_TIME))/{$bun}) AS SIGNED)*{$bun}) AS tDate,
                {$field}
                BOARD_DATE
             FROM wfarm where MB='{$mb}' and concat(BOARD_DATE,' ',BOARD_TIME) between '{$sdate}' and '{$edate}'
@@ -62,6 +66,15 @@ if (!empty($_REQUEST['mb']) &&
     );
 
     $arr = array();
+    $label_array = array(
+            'T1' => '온도',
+            'T2' => '습도',
+            'T3' => '조도',
+            'T4' => 'co2',
+            'T5' => 'PH',
+            'T6' => 'EC',
+            'T7' => 'PM',
+    );
 
     for ($i=1; $i<8; $i++) {
 //        echo $i;
@@ -71,7 +84,7 @@ if (!empty($_REQUEST['mb']) &&
 
         if (is_array(${'_t'.$i.'datas'})) {
             array_push($arr, array(
-                'label' => 'T'.$i,
+                'label' => $label_array['T'.$i],
                 'backgroundColor' => $rgb[$i],
                 'borderColor' => $rgb[$i],
                 'data' => ${'_t'.$i.'datas'},
@@ -136,16 +149,23 @@ if (!empty($_REQUEST['mb']) &&
     t :
     <select name="t">
         <option value="">전체</option>
-        <option value="T1">T1</option>
-        <option value="T2">T2</option>
-        <option value="T3">T3</option>
-        <option value="T4">T4</option>
-        <option value="T5">T5</option>
-        <option value="T6">T6</option>
-        <option value="T7">T7</option>
+        <option value="T1" <? if ($t=="T1") echo "selected" ?> ><?php echo $label_array['T1']?></option>
+        <option value="T2" <? if ($t=="T2") echo "selected" ?> ><?php echo $label_array['T2']?></option>
+        <option value="T3" <? if ($t=="T3") echo "selected" ?> ><?php echo $label_array['T3']?></option>
+        <option value="T4" <? if ($t=="T4") echo "selected" ?> ><?php echo $label_array['T4']?></option>
+        <option value="T5" <? if ($t=="T5") echo "selected" ?> ><?php echo $label_array['T5']?></option>
+        <option value="T6" <? if ($t=="T6") echo "selected" ?> ><?php echo $label_array['T6']?></option>
+        <option value="T7" <? if ($t=="T7") echo "selected" ?> ><?php echo $label_array['T7']?></option>
     </select>
     시작일: <input type="text" id="datepicker_from" style="width:180px;" name="sdate" value="<?php echo $sdate;?>">
     종료일: <input type="text" id="datepicker_to" style="width:180px;" name="edate" value="<?php echo $edate;?>">
+    시간 간격 :
+    <select name="d">
+        <?php for ($i=1; $i<61; $i++) { ?>
+            <option value="<?php echo $i; ?>" <? if ($i==$d) echo "selected" ?> ><?php echo $i;?></option>
+        <?php } ?>
+    </select>
+    분
     <button type="submit" style="width:100px; height: 100px;">검색</button>
 </form>
 
@@ -157,13 +177,13 @@ if (!empty($_REQUEST['mb']) &&
     <tr>
         <td style="width: 300px;">board_date</td>
         <td>MB</td>
-        <?php if (is_array($_t1datas)) {?>  <td>T1</td>  <?php } ?>
-        <?php if (is_array($_t2datas)) {?>  <td>T2</td>  <?php } ?>
-        <?php if (is_array($_t3datas)) {?>  <td>T3</td>  <?php } ?>
-        <?php if (is_array($_t4datas)) {?>  <td>T4</td>  <?php } ?>
-        <?php if (is_array($_t5datas)) {?>  <td>T5</td>  <?php } ?>
-        <?php if (is_array($_t6datas)) {?>  <td>T6</td>  <?php } ?>
-        <?php if (is_array($_t7datas)) {?>  <td>T7</td>  <?php } ?>
+        <?php if (is_array($_t1datas)) {?>  <td><?php echo $label_array['T1']?></td>  <?php } ?>
+        <?php if (is_array($_t2datas)) {?>  <td><?php echo $label_array['T2']?></td>  <?php } ?>
+        <?php if (is_array($_t3datas)) {?>  <td><?php echo $label_array['T3']?></td>  <?php } ?>
+        <?php if (is_array($_t4datas)) {?>  <td><?php echo $label_array['T4']?></td>  <?php } ?>
+        <?php if (is_array($_t5datas)) {?>  <td><?php echo $label_array['T5']?></td>  <?php } ?>
+        <?php if (is_array($_t6datas)) {?>  <td><?php echo $label_array['T6']?></td>  <?php } ?>
+        <?php if (is_array($_t7datas)) {?>  <td><?php echo $label_array['T7']?></td>  <?php } ?>
     </tr>
     <?php
     if (is_array($_labels)) {
@@ -171,7 +191,7 @@ if (!empty($_REQUEST['mb']) &&
     ?>
     <tr>
         <td><?php echo $v ?></td>
-        <td></td>
+        <td><?php echo $mb ?></td>
         <?php if (is_array($_t1datas)) {?>  <td><?php echo $_t1datas[$k] ?></td>  <?php } ?>
         <?php if (is_array($_t2datas)) {?>  <td><?php echo $_t2datas[$k] ?></td>  <?php } ?>
         <?php if (is_array($_t3datas)) {?>  <td><?php echo $_t3datas[$k] ?></td>  <?php } ?>
