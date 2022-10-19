@@ -2,6 +2,16 @@
 include_once "connect.php";
 include_once "session.php";
 
+$label_array = array(
+    'T1' => '온도',
+    'T2' => '습도',
+    'T3' => '조도',
+    'T4' => 'co2',
+    'T5' => 'PH',
+    'T6' => 'EC',
+    'T7' => 'PM',
+);
+
 if (!empty($_REQUEST['mb']) &&
     !empty($_REQUEST['sdate']) &&
     !empty($_REQUEST['edate']) &&
@@ -66,15 +76,6 @@ if (!empty($_REQUEST['mb']) &&
     );
 
     $arr = array();
-    $label_array = array(
-            'T1' => '온도',
-            'T2' => '습도',
-            'T3' => '조도',
-            'T4' => 'co2',
-            'T5' => 'PH',
-            'T6' => 'EC',
-            'T7' => 'PM',
-    );
 
     for ($i=1; $i<8; $i++) {
 //        echo $i;
