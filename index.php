@@ -1,76 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | Log in</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+</head>
+
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="/AdminLTE/index2.html"><b>Admin</b>LTE</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+
+            <form action="conf/loginAction.php" method="post">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Username" name="user_id">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Password" name="user_pw">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+
+            <!-- /.social-auth-links -->
+
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="/AdminLTE/plugins/sweetalert2/sweetalert2.min.js"></script>
 <?php
-session_start();
-include_once "connect.php";
+if (isset($_GET['error'])) {
+    $x = $_GET['error'];
 
-
-if (!empty($_REQUEST['user_id']) &&
-    !empty($_REQUEST['user_pw'])) {
-
-    $err = "";
-
-    foreach ($_REQUEST as $k => $v) {
-        $$k = $v;
-    }
-
-    $sql = "select * from member where id='{$user_id}' ";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_array($result);
-
-    if (isset($row[0])) {
-
-
-        $password = $row['password'];
-
-        $sql = "SELECT CONCAT('*', UPPER(SHA1(UNHEX(SHA1('{$user_pw}'))))) as pass";
-        $result = mysqli_query($conn, $sql);
-        $row_p = mysqli_fetch_array($result);
-
-        if ($password != $row_p['pass']) {
-            $err = "패스워드 틀림";
-        } else {
-            $_SESSION['user_idx'] = $row['idx'];
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['user_name'] = $row['name'];
-        }
+    if ($x == 1) {
+        echo "
+    <script>
+            var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+            });
+            Toast.fire({
+                icon: 'warning',
+                title: '로그인 실패'
+            })
+    </script>
+    ";
+    } else if ($x == 2) {
+        echo "
+    <script>
+            var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+            });
+            Toast.fire({
+                icon: 'error',
+                title: '사용자 이름과 암호를 입력하십시오'
+            })
+    </script>
+    ";
     } else {
-        $err = "아이디가 없음";
+        echo "";
     }
-
 }
-
 ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Login</title>
-    </head>
-    <body>
-    <?php if (!$_SESSION['user_idx']) { ?>
-    <form method='post' action='/'>
-        <table>
-            <tr>
-                <td>아이디</td>
-                <td><input type='text' name='user_id' tabindex='1'/></td>
-                <td rowspan='2'><input type='submit' tabindex='3' value='로그인' style='height:50px'/></td>
-            </tr>
-            <tr>
-                <td>비밀번호</td>
-                <td><input type='password' name='user_pw' tabindex='2'/></td>
-            </tr>
-        </table>
-    </form>
-    <?php } else { ?>
-        <?php if ($_SESSION['user_id'] == "admin") { ?>
-        <a href="./view.day.php">차트 1</a><br/>
-        <a href="./view.month.php">차트 2</a><br/>
-        <?php } else if ($_SESSION['user_id'] == "admin2") { ?>
-        <a href="./view.time.php">차트 3</a><br/>
-        <?php }  ?>
-        <a href="./logout.php">로그아웃</a>
-    <?php } ?>
-    </body>
+</body>
 </html>
-<?php
-    echo $err;
-?>
