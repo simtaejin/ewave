@@ -21,7 +21,7 @@ if (mysqli_num_rows($query) == 1) {
     header("Location:../AdminLTE/");
 
 } else if ($username == '' || $password == '') {
-//    header("Location:../index.php?error=2");
+    header("Location:../index.php?error=2");
 } else {
-//    header("Location:../index.php?error=1");
+    header("Location:../index.php?error=1");
 }

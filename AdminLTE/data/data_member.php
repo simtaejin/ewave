@@ -39,7 +39,10 @@
                                     <td><?php echo $row['id'];?></td>
                                     <td><?php echo $row['name'];?></td>
                                     <td><?php echo $row['create_at'];?></td>
-                                    <td>X</td>
+                                    <td>
+                                        <button type="button" class="btn btn-lg btn-success" style="user-select: auto;" data-idx="<?php echo $row['idx'];?>" >EDIT</button>
+                                        <button type="button" class="btn btn-lg btn-danger" style="user-select: auto;" data-idx="<?php echo $row['idx'];?>" >DELETE</button>
+                                    </td>
                                 </tr>
                                 <?php
                             }
@@ -80,6 +83,8 @@
             </div>
             <div class="modal-body">
                 <form name="member">
+                    <input type="hidden" name="mode" value="create">
+                    <input type="hidden" name="idx" value="">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">ID</label>
                         <div class="col-sm-10">
@@ -115,7 +120,7 @@
 
     $(function () {
         $("[name='save']").click(function(){
-            // alert($("[name='member']").serialize());
+
             $.ajax({
                 url:'../conf/memberAction.php',
                 type:'post',
@@ -127,18 +132,52 @@
                         alert("저장 되었습니다.");
                         location.reload()
                     }
-                    // $('#time').text(data);
-                    // if (data.payload.success == 'success') {
-                    //     alert('fasdf')
-                    //
-                    // }
-                    // var data = JSON.stringify(obj).replace(/\\/g, '');
-                    //
-                    // // console.log(obj.pay_load)
-                    //
-                    // console.log(Object.keys(data))
                 }
             })
+
+
         });
+
+        $(".btn-success").click(function() {
+
+            $("[name='mode']").val('select');
+            $.ajax({
+                url:'../conf/memberAction.php',
+                type:'post',
+                data: {mode:$("[name='mode']").val(), idx:$(this).data('idx')},
+                dataType: "json",
+                success:function(obj){
+
+                    if (obj.pay_load.success == "success") {
+                        $("[name='mode']").val('edit');
+                        $("[name='idx']").val(obj.pay_load.result.idx);
+                        $("[name='id']").val(obj.pay_load.result.id);
+                        $("[name='name']").val(obj.pay_load.result.name);
+
+                        $('#modal-lg').modal('show');
+                    }
+
+                }
+            })
+
+
+        })
+
+        $(".btn-danger").click(function() {
+            $.ajax({
+                url:'../conf/memberAction.php',
+                type:'post',
+                data: {mode:'delete', idx:$(this).data('idx')},
+                dataType: "json",
+                success:function(obj){
+
+                    if (obj.pay_load.success == "success") {
+                        alert("저장 되었습니다.");
+                        location.reload()
+                    }
+
+                }
+            })
+        })
     });
 </script>
