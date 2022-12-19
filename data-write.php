@@ -15,7 +15,7 @@ if ($type=='typeA') {
     $result = mysqli_query($conn, $sql);
 } else if ($type=='typeB') {
 
-    $sql = "INSERT INTO nodeB (`gid`, `a_nid`, `date`, `time`, `date_1`, `date_2`, `date_3`, `date_4`, `date_5`, `date_6`, `control_7`, `control_8`, `create_at`)
+    $sql = "INSERT INTO nodeB (`gid`, `b_nid`, `date`, `time`, `date_1`, `date_2`, `date_3`, `date_4`, `date_5`, `date_6`, `control_7`, `control_8`, `create_at`)
     VALUES ($gid, $nid, '$date', '$time',$date_1,$date_2,$date_3,$date_4,$date_5,$date_6,$control_7,$control_8, '{$create_at}')";
     $result = mysqli_query($conn, $sql);
 }
