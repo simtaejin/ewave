@@ -51,17 +51,17 @@ if ($mode == "select_1") {
     $edate = $_dateTime[1];
 
     if ($bun == '1m') {
-        $bum = 1;
-    } else if ($bun == '5m') {
-        $bum = 5;
-    } else if ($bun == '10m') {
-        $bum = 10;
-    } else if ($bun == '1h') {
         $bum = 60;
+    } else if ($bun == '5m') {
+        $bum = 300;
+    } else if ($bun == '10m') {
+        $bum = 600;
+    } else if ($bun == '1h') {
+        $bum = 3600;
     } else if ($bun == '6h') {
-        $bum = 360;
+        $bum = 21600;
     } else if ($bun == '1day') {
-        $bum = 1440;
+        $bum = 86400;
     }
 
     $query = "select * from `geteway` where `gid`='{$select_value1}' and `nid`='{$select_value2}' ";
@@ -96,11 +96,13 @@ if ($mode == "select_1") {
 
 
 
-function createChartA( $select_value1, $select_value2, $table, $field='all', $bun=5, $sdate, $edate) {
+function createChartA( $select_value1, $select_value2, $table, $field='all', $bun, $sdate, $edate) {
     global $label_a_array, $conn;
 
+    if (!$bun) $bun=3600;
     if (!$sdate) $sdate=date("Y-m-d 00:00:00");
     if (!$edate) $edate=date("Y-m-d 23:59:59");
+
 
     if ($field == 'all') {
         $field = " TRUNCATE(avg(date_1),2) d1sum,
@@ -179,9 +181,10 @@ function createChartA( $select_value1, $select_value2, $table, $field='all', $bu
     return $return;
 }
 
-function createChartB( $select_value1, $select_value2, $table, $field='all', $bun=5, $sdate, $edate) {
+function createChartB( $select_value1, $select_value2, $table, $field='all', $bun, $sdate, $edate) {
     global $label_b_array, $conn;
 
+    if (!$bun) $bun=3600;
     if (!$sdate) $sdate=date("Y-m-d 00:00:00");
     if (!$edate) $edate=date("Y-m-d 23:59:59");
 
