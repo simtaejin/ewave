@@ -5,16 +5,34 @@
       <div class="col-lg-3 col-6">
           <div class="info-box bg-info">
               <span class="info-box-icon"><i class="far fa-bookmark"></i></span>
+              <?php
+                $sql="select gid,
+                               (select if(count(*) > 0, 1, 0) from nodeA where gid = g.gid and create_at > now() - INTERVAL 5 MINUTE) as nodeA
+                        from geteway as g
+                        group by gid";
+                $result = mysqli_query($conn, $sql);
+                $_total_node = 0;
+                $_active_node = 0;
+                while($row = mysqli_fetch_array($result)) {
+                    if ($row) {
 
+                        if ($row['nodeA'] == 1) {
+                            $_active_node++;
+                        }
+                        $_total_node++;
+                    }
+                }
+              if ($_total_node > 0) $operating_rate = ($_active_node / $_total_node) *100;
+              ?>
               <div class="info-box-content">
-                  <span class="info-box-text">Bookmarks</span>
-                  <span class="info-box-number">41,410</span>
+                  <span class="info-box-text">geteway 가동율</span>
+                  <span class="info-box-number"><?php echo $operating_rate;?>%</span>
 
                   <div class="progress">
-                      <div class="progress-bar" style="width: 70%"></div>
+                      <div class="progress-bar" style="width: <?php echo $operating_rate;?>%"></div>
                   </div>
                   <span class="progress-description">
-                  70% Increase in 30 Days
+<!--                  70% Increase in 30 Days-->
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -24,16 +42,34 @@
       <div class="col-lg-3 col-6">
           <div class="info-box bg-success">
               <span class="info-box-icon"><i class="far fa-thumbs-up"></i></span>
+              <?php
+              $sql="select gid, nid,
+                           (select if(count(*) >0, 1, 0 ) from nodeA where gid = g.gid and a_nid = g.nid and create_at > now() - INTERVAL 5 MINUTE) as nodeA
+                    from geteway as g
+                    group by nid";
+              $result = mysqli_query($conn, $sql);
+              $_total_node = 0;
+              $_active_node = 0;
+              while($row = mysqli_fetch_array($result)) {
+                  if ($row) {
 
+                      if ($row['nodeA'] == 1) {
+                          $_active_node++;
+                      }
+                      $_total_node++;
+                  }
+              }
+              if ($_total_node > 0) $node_rate = ($_active_node / $_total_node) *100;
+              ?>
               <div class="info-box-content">
-                  <span class="info-box-text">Likes</span>
-                  <span class="info-box-number">41,410</span>
+                  <span class="info-box-text">node 가동율</span>
+                  <span class="info-box-number"><?php echo $node_rate;?>%</span>
 
                   <div class="progress">
-                      <div class="progress-bar" style="width: 70%"></div>
+                      <div class="progress-bar" style="width: <?php echo $node_rate;?>%"></div>
                   </div>
                   <span class="progress-description">
-                  70% Increase in 30 Days
+<!--                  70% Increase in 30 Days-->
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -46,14 +82,14 @@
               <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
 
               <div class="info-box-content">
-                  <span class="info-box-text">Events</span>
+                  <span class="info-box-text">Last input</span>
                   <span class="info-box-number">41,410</span>
 
                   <div class="progress">
                       <div class="progress-bar" style="width: 70%"></div>
                   </div>
                   <span class="progress-description">
-                  70% Increase in 30 Days
+<!--                  70% Increase in 30 Days-->
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -244,15 +280,7 @@
                                     type: 'line',
                                     data: data,
                                     options: {
-                                        scales:{
-                                            yAxes: [{
-                                                ticks: {
-                                                    min: 0,
-                                                    max: 600,
-                                                    stepSize : 10
-                                                }
-                                            }]
-                                        }
+
                                     }
                                 };
 

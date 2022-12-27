@@ -33,7 +33,7 @@ if ($mode == "select_1") {
 
     $query = "select * from `geteway` where `gid`='{$select_value}' ";
     $result = mysqli_query($conn, $query);
-    while($row = mysqli_fetch_array($result)) {
+    while ($row = mysqli_fetch_array($result)) {
         $arr['nid'][] = $row['nid'];
         $arr['nid_type'][] = $row['nid_type'];
     }
@@ -45,6 +45,23 @@ if ($mode == "select_1") {
     echo json_encode($response);
 
 } else if ($mode == "select_2") {
+    $query = "select * from `geteway` where `gid`='{$select_value1}' and `nid`='{$select_value2}' ";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_array($result);
+
+    if ($row['nid_type'] == "a") {
+        $arr = array_keys($label_a_array);
+    } else if ($row['nid_type'] == "b") {
+        $arr = array_keys($label_b_array);
+    }
+
+    if ($arr) {
+        $response['pay_load']['success'] = "success";
+        $response['pay_load']['result'] = $arr;
+    }
+    echo json_encode($response);
+
+} else if ($mode == "search") {
 
     $_dateTime = explode(' - ', $sdateAtedate);
     $sdate = $_dateTime[0];
@@ -64,6 +81,8 @@ if ($mode == "select_1") {
         $bum = 86400;
     }
 
+    $field = $select_value3 ? str_replace('data','date',$select_value3) : "all";
+
     $query = "select * from `geteway` where `gid`='{$select_value1}' and `nid`='{$select_value2}' ";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_array($result);
@@ -73,14 +92,14 @@ if ($mode == "select_1") {
         $table = "nodeA";
 
         /* char data */
-        $chart_data = createChartA($select_value1, $select_value2, $table, 'all', $bum, $sdate, $edate);
+        $chart_data = createChartA($select_value1, $select_value2, $table, $field, $bum, $sdate, $edate);
 
     } else if ($row['nid_type'] == "b") {
         $arr = array_keys($label_b_array);
         $table = "nodeB";
 
         /* char data */
-        $chart_data = createChartB($select_value1, $select_value2, $table, 'all', $bum, $sdate, $edate);
+        $chart_data = createChartB($select_value1, $select_value2, $table, $field, $bum, $sdate, $edate);
     }
 
 
@@ -96,7 +115,7 @@ if ($mode == "select_1") {
 
 
 
-function createChartA( $select_value1, $select_value2, $table, $field='all', $bun, $sdate, $edate) {
+function createChartA( $select_value1, $select_value2, $table, $field, $bun, $sdate, $edate) {
     global $label_a_array, $conn;
 
     if (!$bun) $bun=3600;
@@ -116,7 +135,7 @@ function createChartA( $select_value1, $select_value2, $table, $field='all', $bu
     } else {
         $_t = explode('_', $field);
         $sum = "d".$_t[1].'sum';
-        $field = " TRUNCATE(avg({$field}),2) {$sum} ";
+        $field = " TRUNCATE(avg({$field}),2) {$sum}, ";
     }
 
     $sql = "SELECT FROM_UNIXTIME(CAST(FLOOR(UNIX_TIMESTAMP(concat(`date`,' ',`time`))/{$bun}) AS SIGNED)*{$bun}) AS tDate,
@@ -181,7 +200,7 @@ function createChartA( $select_value1, $select_value2, $table, $field='all', $bu
     return $return;
 }
 
-function createChartB( $select_value1, $select_value2, $table, $field='all', $bun, $sdate, $edate) {
+function createChartB( $select_value1, $select_value2, $table, $field, $bun, $sdate, $edate) {
     global $label_b_array, $conn;
 
     if (!$bun) $bun=3600;
